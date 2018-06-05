@@ -1,0 +1,3496 @@
+\documentclass[12pt]{book}
+\usepackage[brazil]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{keystroke}
+\usepackage{listings}
+\usepackage[compact]{titlesec}
+\usepackage{lipsum}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{mathtools}
+\usepackage[T1]{fontenc}
+\usepackage{upquote}
+\usepackage{tcolorbox}
+\usepackage{wrapfig}
+\usepackage{pgf-soroban}
+\usepackage{tikz}
+\usepackage{enumerate}
+\usepackage{circuitikz}
+\usepackage{pdfpages}
+\usepgflibrary{decorations.markings}
+
+
+\titleformat{\chapter}[display]
+            {\bfseries\normalsize}
+            {\filright\chaptertitlename~\large\thechapter}
+            {5pt}{\large}
+            \titlespacing{\chapter}{0pt}{0pt}{4pt}
+
+
+\title{Soroban}
+\author{Ed}
+\date{}
+
+\newcounter{observershipCounter}
+\setcounter{observershipCounter}{0}
+
+
+\renewcommand{\colbil}{white}
+\renewcommand{\coltig}{black}
+
+\begin{document}
+%% \maketitle
+
+%%\thispagestyle{empty}
+
+\chapter{Circuits}
+
+\begin{circuitikz}\draw
+(6,0) node[or port, rotate=180] (or0) {}
+($(or0.in 2) + (1,0)$) node[and port, rotate=180] (and1) {}
+(or0.in 2) to (and1.out)
+($(and1.in 2) + (1,0)$) node (x2) {X}
+($(and1.in 1) + (1,-1)$) node[not port, rotate=180] (not2) {}
+($(not2.in) + (1,0)$) node (y3) {Y}
+($(or0.in 1) + (1,-1)$) node[and port, rotate=180] (and1) {}
+(or0.in 1) to (and1.out)
+($(and1.in 2) + (1,0)$) node[not port, rotate=180] (not2) {}
+($(not2.in) + (1,0)$) node (x3) {X}
+($(and1.in 1) + (1,-0)$) node (y2) {Y}
+;
+\end{circuitikz}
+
+\chapter{Soroban}
+As colunas ({\em keta} em japonês) 
+por onde deslizam as pedras
+indicam centavos, décimos, unidades,
+dezenas, centenas, milhares, etc. Pedra
+abaixo da barra divisória (hari) chama-se
+ichidama e vale
+1 na casa das unidades, 10 nas dezenas,
+100 nas centenas, etc. Pedra acima da hari
+chama-se godama e vale 5 nas unidades,
+50 nas dezenas, 500 nas centenas, etc.
+Para zerar, coloca-se
+o ábaco na vertical, de modo
+que as ichidamas
+afastem-se da barra divisória. Em seguida, deslizamos
+o dedo polegar por baixo de
+cada godama, separando-a da hari. 
+
+
+\paragraph{75+82}= 157.
+O ábaco está zerado quando
+todas as pedras estão
+afastadas da hari           .
+Para efetuar essa soma,
+marca-se 75 no ábaco. As unidades estão
+na terceira coluna da direita para a esquerda,
+onde há um ponto decimal na hari.
+As dezenas estão na quarta coluna.
+Para indicar 70 dezenas, seguramos a
+pedra de 50 com o indicador e duas pedras
+de 10 com o polegar. Um movimento de
+pinça dos referidos dedos aproxima
+20 e 50 da barra de separação. Em seguida,
+puxamos a pedra de 5 para a barra de separação
+com o indicador.
+
+\ladj{0.25}
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \tige{9}{0}{1}       %% unidade
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}
+   \tige{7}{0}{0}
+   \tige{8}{7}{0}       %<- here a dot: units
+   \binoire{8}{10}{gray}
+   \binoire{8}{5}{gray}
+   \binoire{8}{4}{gray}
+   \tige{9}{5}{1}
+   \binoire{9}{10}{gray}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+Para somar 82 a 75, deveríamos
+começar por adicionar 80 à coluna das dezenas,
+mas isso não é possível,
+pois não temos 5+3 pedras disponíveis
+na quarta hari da direita para a esquerda.
+Então, acrescentamos
+100 e tiramos 20. As pedras cortadas
+representam 20 unidades subtraídas.
+Agora, acrescentamos 2 unidades e
+terminamos o cálculo de 75+82.\\
+
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}
+   \tige{7}{1}{0}
+   \binoire{7}{5}{gray}
+   \tige{8}{5}{0}       %<- here a dot: units
+   \binoire{8}{10}{gray}
+   \barbil{8}{4}{0}
+   \barbil{8}{3}{0}
+   \tige{9}{5}{1}
+   \binoire{9}{10}{gray}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}
+   \tige{7}{1}{0}
+   \binoire{7}{5}{gray}
+   \tige{8}{5}{0}      
+   \binoire{8}{10}{gray}
+   \tige{9}{7}{1}         %<- here a dot: units
+   \binoire{9}{10}{gray}
+   \binoire{9}{5}{gray}
+   \binoire{9}{4}{gray}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+
+\paragraph{87+65= 152.} Marque 87 no ábaco.
+Em seguida, some 100-50+10= 60:\\
+
+\vspace{0.2cm}
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}
+   \tige{7}{0}{0}
+   \tige{8}{8}{0}       %<- here a dot: units
+   \binoire{8}{10}{gray}
+   \binoire{8}{5}{gray}
+   \binoire{8}{4}{gray}
+   \binoire{8}{3}{gray}
+   \tige{9}{7}{1}
+   \binoire{9}{10}{gray}
+   \binoire{9}{5}{gray}
+   \binoire{9}{4}{gray}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}
+   \tige{7}{1}{0}
+   \binoire{7}{5}{gray}
+   \tige{8}{4}{0}       %<- here a dot: units
+   \binoire{8}{2}{gray}
+   \binoire{8}{3}{gray}
+   \binoire{8}{4}{gray}
+   \binoire{8}{5}{gray}
+   \barbil{8}{9}{0}
+   \tige{9}{7}{1}
+   \binoire{9}{10}{gray}
+   \binoire{9}{5}{gray}
+   \binoire{9}{4}{gray}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+\verb||\\
+Agora temos de somar 5 nas unidades. Acontece
+que só temos duas pedras disponíveis
+na coluna das unidades. O que fazer?
+Somamos 10 e subtraímos 5. \\
+
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}
+   \tige{7}{1}{0}
+   \binoire{7}{5}{gray}
+   \tige{8}{5}{0}       %<- here a dot: units
+   \binoire{8}{10}{gray}
+   \barbil{8}{4}{0}
+   \barbil{8}{3}{0}
+   \barbil{8}{2}{0}
+   \barbil{8}{1}{0}
+   \tige{9}{2}{1}
+   \binoire{9}{5}{gray}
+   \binoire{9}{4}{gray}
+   \barbil{9}{9}{1}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.5\textwidth}
+Para somar 10, foi preciso somar
+a pedra de 50 (em cinza) e subtrair
+40 (4 pedras cortadas nas dezenas).
+Para subtrair 5, bastou eliminar a pedra de 5 unidades,
+que aparece cortada.
+\end{minipage}
+
+
+\section{Soma de três dígitos}
+Vamos verificar que 568+947= 1515. Inicialmente,
+vamos marcar 568 no ábaco.\\
+
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}
+   \tige{7}{5}{0}       %% milhar
+   \tige{8}{6}{0}       %<- here a dot: units
+   \tige{9}{8}{1}
+   \binoire{7}{10}{gray}
+   \binoire{8}{10}{gray}
+   \binoire{8}{5}{gray}
+   \binoire{9}{10}{gray}
+   \binoire{9}{5}{gray}
+   \binoire{9}{4}{gray}
+   \binoire{9}{3}{gray}   
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+
+Agora, vamos somar 900. Como não há pedras suficientes
+na coluna das centenas, precisamos de somar 1000
+e subtrair 100. Para subtrair 100, temos de
+subtrair 500 e somar 400. No diagrama abaixo,
+a pedra de 500 que foi subtraída das dezenas
+aparece cortada. As pedras que representam
+dígitos aparecem em cinza. Note que, até aqui,
+somamos 568 com 900, e o resultado 1468
+aparece claramente no ábaco.
+
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{1}{1}       %% milhar
+   \tige{7}{4}{0}       %% centena   
+   \tige{8}{6}{0}       %<- here a dot: units
+   \tige{9}{8}{1}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \binoire{6}{5}{gray}
+   \barbil{7}{9}{0}
+   \binoire{7}{2}{gray}
+   \binoire{7}{3}{gray}
+   \binoire{7}{4}{gray}
+   \binoire{7}{5}{gray}
+   \binoire{8}{10}{gray}
+   \binoire{8}{5}{gray}
+   \binoire{9}{10}{gray}
+   \binoire{9}{5}{gray}
+   \binoire{9}{4}{gray}
+   \binoire{9}{3}{gray}
+   \cadre{11}
+\end{tikzpicture}
+
+Agora vamos somar mais 40 a 1468, onde 40 são as
+dezenas de 947. Como não temos pedras suficientes
+na casa das dezenas, vamos somar 100 e subtrair
+60. Para somar 100, precisamos de adicionar a
+pedra de 500 e subtrair 400. A subtração de
+60 é direta, pois há uma pedra de 10 e uma de
+50 em 1468. As pedras que
+formam os 400 eliminados estão cortadas.
+O resultado até agora está em 1508.\\
+
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{1}{1}       %% milhar
+   \tige{7}{5}{0}       %% centena
+   \tige{8}{0}{0}       %<- here a dot: units
+   \tige{9}{8}{1}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \binoire{6}{5}{gray}
+   \binoire{7}{10}{gray}
+   \barbil{7}{4}{0}
+   \barbil{7}{3}{0}
+   \barbil{7}{2}{0}
+   \barbil{7}{1}{0}
+   \binoire{9}{10}{gray}
+   \binoire{9}{5}{gray}
+   \binoire{9}{4}{gray}
+   \binoire{9}{3}{gray}
+   \cadre{11}
+\end{tikzpicture}
+
+Para terminar o cálculo, falta apenas somar 7
+a 1508. Como sói acontecer, não temos pedras
+suficientes nas unidades para adicionar 7.
+Então, somamos 10 e subtraímos 3.\\
+
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{1}{1}       %% milhar
+   \tige{7}{5}{0}       %% centena
+   \tige{8}{1}{0}       %<- here a dot: units
+   \tige{9}{5}{1}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \barbil{9}{2}{1}
+   \barbil{9}{3}{1}
+   \barbil{9}{4}{1}
+   \binoire{8}{5}{gray}
+   \binoire{6}{5}{gray}
+   \binoire{7}{10}{gray}
+   \binoire{8}{5}{gray}
+   \binoire{9}{10}{gray}
+   \cadre{11}
+\end{tikzpicture}
+
+O resultado final da soma 568+947 é 1515
+e aparece em cinza na figura abaixo.\\
+
+\ladj{0.5}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{1}{1}       %% milhar
+   \tige{7}{5}{0}       %% centena
+   \tige{8}{1}{0}       %<- here a dot: units
+   \tige{9}{5}{1}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \binoire{6}{5}{gray}
+   \binoire{7}{10}{gray}
+   \binoire{8}{5}{gray}
+   \binoire{9}{10}{gray}
+   \cadre{11}
+\end{tikzpicture}
+
+
+\section{Adições encadeadas}
+
+Vamos ver como fazer a seguinte sequência
+de somas encadeadas: 34+87+38+95.\\
+
+\ladj{0.25}
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{3}{0}       %% dezena
+   \tige{9}{4}{1}       %% unidade
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.5\textwidth}
+  Começamos marcando 34 no ábaco.
+  Adicionamos 30 na casa das
+  dezenas e 4 nas unidades,
+  conforme indicado ao lado.
+\end{minipage}
+
+
+\vspace{0.5cm}
+\paragraph{34+87}= 121\\
+
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{1}{0}       %% centena
+   \tige{8}{1}{0}       %% dezena
+   \tige{9}{4}{1}       %% unidade
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.5\textwidth}
+  Para efetuar 87+34, começamos somando 80+34.
+  Como não temos pedras suficientes nas
+  dezenas, somamos 100 e subtraímos 20.
+\end{minipage}
+
+\vspace{0.5cm}
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{1}{0}       %% centena
+   \tige{8}{2}{0}       %% dezena
+   \tige{9}{1}{1}       %% unidade
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.5\textwidth}
+  Agora somamos 7 na casa das unidades.
+  Na situação do ábaco, isso corresponde
+  a somar 10 e subtrair 3, como mostrado
+  ao lado.
+\end{minipage}
+
+
+\vspace{0.5cm}
+\paragraph{121+38}=159\\
+
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{1}{0}       %% centena
+   \tige{8}{5}{0}       %% dezena
+   \tige{9}{1}{1}       %% unidade
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.5\textwidth}
+  Para somar 38 a 121, começamos somando 30,
+  ou seja, adicionamos 50 e subtraímos 20
+  da casa das dezenas. O resultado é 151.
+\end{minipage}
+
+\vspace{0.4cm}
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{1}{0}       %% centena
+   \tige{8}{5}{0}       %% dezena
+   \tige{9}{9}{1}       %% unidade
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.5\textwidth}
+  Agora somamos 8 na casa das unidades,
+  isto é, 5+3. O resultado é 159.
+\end{minipage}
+
+
+\vspace{0.8cm}
+\paragraph{159+95}= 254\\
+
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{2}{0}       %% centena
+   \tige{8}{4}{0}       %% dezena
+   \tige{9}{9}{1}       %% unidade
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.5\textwidth}
+  Para somar 95 a 159, vamos
+  inicialmente somar 90 a 159.
+  Devido à alocação das pedras na
+  hari de dezenas, essa operação
+  corresponde a somar 100,
+  subtrair 50 e adicionar 4
+  pedras de 10. O resultado mostrado
+  na figura é 249.
+\end{minipage}
+
+
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{2}{0}       %% centena
+   \tige{8}{5}{0}       %% dezena
+   \tige{9}{4}{1}       %% unidade
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.5\textwidth}
+\verb||\\
+  Para somar 5 unidades ao número
+  249 que está no soroban, temos
+  que acrescentar 10 à coluna das
+  dezenas. A única maneira de
+  fazer isso é somar 50 e subtrair
+  40. O próximo passo é subtrair
+  5 da coluna das unidades.
+\end{minipage}
+
+\section{Soma com transbordamento}
+
+Nessa seção, vamos estudar as ocorrências
+de soma de dígitos. Em suma, queremos saber
+o que pode acontecer quando tentamos somar
+dois dígitos. As possibilidades são:
+
+\paragraph{Há pedras para o segundo dígito.}
+Depois de marcar o primeiro dígito, há pedras
+livres em quantidade suficiente para representar
+o segundo dígito. No exemplo abaixo, fizemos a
+soma de $3+4$. O primeiro
+dígito é 3, de modo que sobram a pedra de 5
+e uma das pedras de 1 para adicionar 4. Então,
+adicionamos a pedra de 5 e subtraímos 1.
+A resposta é 7.\\
+
+\vspace{0.5cm}
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \tige{9}{3}{1}       %% unidade
+   \binoire{9}{5}{gray}
+   \binoire{9}{4}{gray}
+   \binoire{9}{3}{gray}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \tige{9}{7}{1}       %% unidade
+   \binoire{9}{10}{gray}
+   \binoire{9}{5}{gray}
+   \binoire{9}{4}{gray}
+   \barbil{9}{2}{0}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+\vspace{0.5cm}
+\paragraph{Não há pedras na coluna para o segundo dígito.}
+Em pouco mais da metade dos casos, o número de pedras
+não é suficiente para adicionar o segundo dígito.
+Suponhamos que você queira somar $D_1+D_2$ na
+coluna $n$ e descobre que não tem pedras disponíveis
+para $D_2$. Nesse caso, some $10^{n+1}$ à coluna $n+1$
+e subtrai $(10-D_2)\times 10^n$ da coluna $n$.
+
+Tomemos um exemplo concreto. Você vai somar $D_1=\;6$
+com $D_2=\;8$. Depois de marcar
+$D_1=\;6$ na coluna 0, você verifica que
+não há pedras bastante
+para somar $D_2=\;8$. Então, você soma $1\times 10^{1}$ à coluna 1
+e subtrai $(10-8)\times 10^0=\;2$ da coluna 0. Isso é equivalente
+a somar $8$ à coluna 0. O resultado é 14.
+
+\vspace{0.5cm}
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \tige{9}{6}{1}       %% unidade
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \binoire{9}{5}{gray}
+   \binoire{9}{10}{gray}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{1}{0}       %% dezena
+   \binoire{8}{5}{gray}
+   \tige{9}{4}{1}       %% unidade
+   \tige{10}{0}{0}
+   \binoire{9}{5}{gray}
+   \tige{11}{4}{0}
+   \binoire{9}{5}{gray}
+   \binoire{9}{4}{gray}
+   \binoire{9}{3}{gray}
+   \binoire{9}{2}{gray}
+   \barbil{9}{9}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+\vspace{0.5cm}
+Na fase de subtrair $2$ da 
+coluna 0, houve um pequeno contratempo:
+não havia $2$ pedras de
+valor unitário para efetuar a subtração.
+Por isso, subtraímos a pedra de 5
+e somamos 3 pedras de 1. 
+
+Você deve ter notado a estranha maneira
+que estamos usando para numerar as colunas.
+A coluna 0 é a terceira da esquerda para
+a direita. A coluna 0 é a coluna das
+unidades. A primeira coluna da esquerda
+é a coluna $-2$ e equivale aos centésimos.
+A segunda coluna é a $-1$ e representa
+os décimos. A pedra de 5 representa $0.5$
+na coluna $-1$.
+
+Para realmente acompanhar essa explicação,
+você precisa entender que 1 na coluna
+$n$ é igual a $10^n$. Então, quando você
+soma $1$ na coluna $1$, está realmente
+somando $10$. Para apreciar esse fato em
+sua totalidade, vamos supor que você
+queira somar $600+800$. Nada mudou no
+problema, exceto que você vai trabalhar
+na coluna 2.
+
+\vspace{0.5cm}
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{6}{0}       %% centena
+   \binoire{7}{5}{gray}
+   \binoire{7}{10}{gray}
+   \tige{8}{0}{0}       %% dezena
+   \tige{9}{0}{1}       %% unidade
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{1}{1}       %% milhar
+   \tige{7}{4}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \tige{9}{0}{1}       %% unidade
+   \tige{10}{0}{0}
+   \binoire{6}{5}{gray}
+   \tige{11}{0}{0}
+   \binoire{7}{5}{gray}
+   \binoire{7}{4}{gray}
+   \binoire{7}{3}{gray}
+   \binoire{7}{2}{gray}
+   \barbil{7}{9}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+\section{Coluna de transbordamento cheia}
+Conforme já vimos, há situações em
+que é impossível somar um dígito $D_1$
+ao conteúdo da coluna $n$. Quando isso
+acontece, temos de incrementar a coluna
+$n+1$. Entretanto, a coluna $n+1$ pode
+já ter 9 pontos. Nesse caso, zeramos
+a coluna $n+1$ e incrementamos
+a coluna $n+2$ de $1$. Vejamos um
+exemplo concreto. Vamos somar $86+17$.
+Essa soma pode ser decomposta em
+$86+10+7$. Quando somamos $10$ a $86$,
+a coluna das dezenas fica cheia com
+$9$ dezenas.
+
+\vspace{0.2cm}
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{8}{0}       %% dezena
+   \tige{9}{6}{1}       %% unidade
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{9}{0}       %% dezena
+   \tige{9}{6}{1}       %% unidade
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+\vspace{0.2cm}
+Quando tentamos somar $7$, não temos
+pedras suficientes na coluna das unidades.
+E quando transbordamos 10 para a coluna
+das dezenas, descobrimos que essa coluna
+está cheia. Então zeramos a coluna das
+dezenas e acrescentamos 100 à coluna
+das centenas. Em seguida, subtraímos 3
+da coluna das unidades. A resposta é 103.
+
+\vspace{0.2cm}
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{9}{0}       %% dezena
+   \tige{9}{6}{1}       %% unidade
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{1}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \tige{9}{3}{1}       %% unidade
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+\vspace{0.2cm}
+É possível encontrar uma sequência de duas ou mais
+colunas com 9 pontos cada coluna. Se houver transbordamento para
+a primeira dessas colunas, devemos zerar todas,
+até encontrar uma que possa receber o transbordamento.
+
+\vspace{0.2cm}
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{9}{1}       %% milhar
+   \tige{7}{9}{0}       %% centena
+   \tige{8}{9}{0}       %% dezena
+   \tige{9}{7}{1}       %% unidade
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{1}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \tige{9}{5}{1}       %% unidade
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+
+\section{Exercícios de soma}
+
+\paragraph{505+4016}= 4521.\\
+
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{5}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \tige{9}{5}{1}       %% unidade
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{4}{1}       %% milhar
+   \tige{7}{5}{0}       %% centena
+   \tige{8}{2}{0}       %% dezena
+   \tige{9}{1}{1}       %% unidade
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+\vspace{0.2cm}
+\paragraph{2751+5221}= 7972\\
+
+\vspace{0.4cm}
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{2}{1}       %% milhar
+   \tige{7}{7}{0}       %% centena
+   \tige{8}{5}{0}       %% dezena
+   \tige{9}{1}{1}       %% unidade
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{7}{1}       %% milhar
+   \tige{7}{9}{0}       %% centena
+   \tige{8}{7}{0}       %% dezena
+   \tige{9}{2}{1}       %% unidade
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+
+\vspace{1cm}
+\paragraph{5997+8029}= 14026\\
+
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{5}{1}       %% milhar
+   \tige{7}{9}{0}       %% centena
+   \tige{8}{9}{0}       %% dezena
+   \tige{9}{7}{1}       %% unidade
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{1}{0}       %<- here a dot: units thousands
+   \tige{6}{4}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{2}{0}       %% dezena
+   \tige{9}{6}{1}       %% unidade
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+\vspace{0.5cm}
+\paragraph{3932+5297+7320}= 16549\\
+
+\vspace{0.4cm}
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{3}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{9}{0}       %<- here no dot: tens of thousands
+   \tige{5}{3}{0}       %<- here a dot: units thousands
+   \tige{6}{2}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \cadre{8}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{9}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{2}{0}       %<- here no dot: tens of thousands
+   \tige{5}{2}{0}       %<- here a dot: units thousands
+   \tige{6}{9}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \cadre{8}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{1}{0}       %<- here a dot: unit million
+   \tige{3}{6}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{5}{0}       %<- here no dot: tens of thousands
+   \tige{5}{4}{0}       %<- here a dot: units thousands
+   \tige{6}{9}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \cadre{8}
+\end{tikzpicture}
+\end{minipage}
+
+\vspace{0.4cm}
+\paragraph{3777+9979+9886}= \\
+
+\vspace{0.2cm}
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{3}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{7}{0}       %<- here no dot: tens of thousands
+   \tige{5}{7}{0}       %<- here a dot: units thousands
+   \tige{6}{7}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \cadre{8}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{1}{0}       %<- here a dot: unit million
+   \tige{3}{3}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{7}{0}       %<- here no dot: tens of thousands
+   \tige{5}{5}{0}       %<- here a dot: units thousands
+   \tige{6}{6}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \cadre{8}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{2}{0}       %<- here a dot: unit million
+   \tige{3}{3}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{6}{0}       %<- here no dot: tens of thousands
+   \tige{5}{4}{0}       %<- here a dot: units thousands
+   \tige{6}{2}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \cadre{8}
+\end{tikzpicture}
+\end{minipage}
+
+\vspace{0.5cm}
+\paragraph{5237+8409+9584}= 23230\\
+
+\vspace{0.2cm}
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{5}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{2}{0}       %<- here no dot: tens of thousands
+   \tige{5}{3}{0}       %<- here a dot: units thousands
+   \tige{6}{7}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \cadre{8}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{1}{0}       %<- here a dot: unit million
+   \tige{3}{3}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{6}{0}       %<- here no dot: tens of thousands
+   \tige{5}{4}{0}       %<- here a dot: units thousands
+   \tige{6}{6}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \cadre{8}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{2}{0}       %<- here a dot: unit million
+   \tige{3}{3}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{2}{0}       %<- here no dot: tens of thousands
+   \tige{5}{3}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \cadre{8}
+\end{tikzpicture}
+\end{minipage}
+
+\section{Soma com centavos}
+Como você pode ver abaixo, é muito fácil acrescentar centavos
+no esquema de soma. Basta escrever as frações depois
+do ponto decimal da direita. Há duas casas depois
+desse ponto, justamente para registrar os centavos.
+
+\paragraph{964.5+671.2+1500}= 3135.7\\
+
+\vspace{0.2cm}
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{9}{0}       %<- here no dot: tens of thousands
+   \tige{5}{6}{0}       %<- here a dot: units thousands
+   \tige{6}{4}{1}       %% milhar
+   \tige{7}{5}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \cadre{8}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{1}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{6}{0}       %<- here no dot: tens of thousands
+   \tige{5}{3}{0}       %<- here a dot: units thousands
+   \tige{6}{5}{1}       %% milhar
+   \tige{7}{7}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \cadre{8}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{3}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{1}{0}       %<- here no dot: tens of thousands
+   \tige{5}{3}{0}       %<- here a dot: units thousands
+   \tige{6}{5}{1}       %% milhar
+   \tige{7}{7}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \cadre{8}
+\end{tikzpicture}
+\end{minipage}
+
+\paragraph{964.5+671.2+1598.5}= 3234.2\\
+
+\vspace{0.2cm}
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{9}{0}       %<- here no dot: tens of thousands
+   \tige{5}{6}{0}       %<- here a dot: units thousands
+   \tige{6}{4}{1}       %% milhar
+   \tige{7}{5}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \cadre{8}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{1}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{6}{0}       %<- here no dot: tens of thousands
+   \tige{5}{3}{0}       %<- here a dot: units thousands
+   \tige{6}{5}{1}       %% milhar
+   \tige{7}{7}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \cadre{8}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{3}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{2}{0}       %<- here no dot: tens of thousands
+   \tige{5}{3}{0}       %<- here a dot: units thousands
+   \tige{6}{4}{1}       %% milhar
+   \tige{7}{2}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \cadre{8}
+\end{tikzpicture}
+\end{minipage}
+
+
+\chapter{Multiplicação}
+
+\paragraph{47 $\times$ 38.}
+Colocamos o multiplicando 47 no extremidade
+esquerda do soroban. Como o multiplicando
+tem 2 algarismos, reservamos 2+1 algarismos
+na extremidade direita para o resultado.
+Ao lado do resultado, na quinta e quarta colunas
+da direita, posicionamos o multiplicador,
+que é 38. Agora, multiplicamos as 4 dezenas
+de 47 pelas 8 unidades de 38 e colocamos 32 nas centenas
+e dezenas do resultado. Em seguida,
+multiplicamos as 7 unidades de 47 pelas 8
+unidades de 38 e adicionamos 56 às
+dezenas e unidades do resultado.\\
+
+\vspace{0.25cm}
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{4}{0}
+   \tige{2}{7}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{3}{0}       %% centena
+   \tige{8}{8}{0}       %% dezena
+   \tige{9}{0}{1}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \binoire{1}{2}{gray}
+   \binoire{1}{3}{gray}
+   \binoire{1}{4}{gray}
+   \binoire{1}{5}{gray}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{7}{3}{gray}
+   \binoire{7}{4}{gray}
+   \binoire{7}{5}{gray}
+   \binoire{8}{3}{gray}
+   \binoire{8}{4}{gray}
+   \binoire{8}{5}{gray}
+   \binoire{8}{10}{gray}   
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{1}       %% milhar
+   \tige{2}{3}{0}       %% centena
+   \tige{3}{8}{0}       %% dezena
+   \tige{4}{3}{1}
+   \tige{5}{2}{0}
+   \tige{6}{0}{0}
+   \binoire{2}{3}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{3}{3}{gray}
+   \binoire{3}{4}{gray}
+   \binoire{3}{5}{gray}
+   \binoire{3}{10}{gray}   
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}       %<- here a dot: units thousands
+   \tige{2}{3}{1}       %% milhar
+   \tige{3}{8}{0}       %% dezena
+   \tige{4}{3}{1}
+   \tige{5}{7}{0}
+   \tige{6}{6}{0}
+   \binoire{2}{3}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{3}{3}{gray}
+   \binoire{3}{4}{gray}
+   \binoire{3}{5}{gray}
+   \binoire{3}{10}{gray}
+\end{tikzpicture}
+\end{minipage}
+
+\vspace{0.25cm}
+Agora que terminamos as 8 unidades do
+multiplicador, podemos eliminá-las e
+começar a trabalhar com as 3 dezenas.
+Multiplicamos as 4 dezenas de 47 por
+3 e adicionamos 12 aos milhares e centenas
+do resultado. Em seguida multiplicamos
+as 7 unidades de 47 por 3 e adicionamos 21
+às centenas e dezenas do resultado,
+que é 1786.
+
+\vspace{0.25cm}
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{4}{0}
+   \tige{2}{7}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{3}{1}       %% milhar
+   \tige{8}{0}{0}       %% dezena
+   \tige{9}{3}{1}
+   \tige{10}{7}{0}
+   \tige{11}{6}{0}
+   \cadre{11}
+   \binoire{1}{2}{gray}
+   \binoire{1}{3}{gray}
+   \binoire{1}{4}{gray}
+   \binoire{1}{5}{gray}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{7}{3}{gray}
+   \binoire{7}{4}{gray}
+   \binoire{7}{5}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{1}       %% milhar
+   \tige{2}{3}{0}       %% centena
+   \tige{3}{1}{0}       %% dezena
+   \tige{4}{5}{1}
+   \tige{5}{7}{0}
+   \tige{6}{6}{0}
+   \binoire{2}{3}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{5}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}       %<- here a dot: units thousands
+   \tige{2}{3}{1}       %% milhar
+   \tige{3}{1}{0}       %% dezena
+   \tige{4}{7}{1}
+   \tige{5}{8}{0}
+   \tige{6}{6}{0}
+   \binoire{2}{3}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{5}{gray}
+\end{tikzpicture}
+\end{minipage}
+
+%%% daqui
+\paragraph{23 $\times$ 14.}
+Posicionamos o multiplicando 23 no extremidade
+esquerda do soroban. Considerando que 23
+tem 2 dígitos, reservamos 2+1 posições
+na extremidade direita para o resultado.
+Ao lado do resultado, na quinta e quarta colunas
+da direita, pomos a multiplicador 14.
+Agora, multiplicamos $2\times 4$ e colocamos
+08 nas centenas e dezenas do resultado.
+Depois,
+multiplicamos $3\times 4$ e somamos 12 às
+dezenas e unidades do resultado.\\
+
+\vspace{0.25cm}
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{2}{0}
+   \tige{2}{3}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{1}{0}       %% centena
+   \tige{8}{4}{0}       %% dezena
+   \tige{9}{0}{1}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \binoire{1}{5}{gray}
+   \binoire{1}{4}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{3}{gray}
+   \binoire{7}{5}{gray}
+   \binoire{8}{5}{gray}
+   \binoire{8}{4}{gray}
+   \binoire{8}{3}{gray}
+   \binoire{8}{2}{gray}   
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{1}       %% milhar
+   \tige{2}{1}{0}       %% centena
+   \tige{3}{4}{0}       %% dezena
+   \tige{4}{0}{1}
+   \tige{5}{8}{0}
+   \tige{6}{0}{0}
+   \binoire{2}{5}{gray}
+   \binoire{3}{2}{gray}
+   \binoire{3}{3}{gray}
+   \binoire{3}{4}{gray}
+   \binoire{3}{5}{gray}   
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{1}       %% milhar
+   \tige{2}{1}{0}       %% centena
+   \tige{3}{4}{0}       %% dezena
+   \tige{4}{0}{1}
+   \tige{5}{9}{0}
+   \tige{6}{2}{0}
+   \binoire{2}{5}{gray}
+   \binoire{3}{2}{gray}
+   \binoire{3}{3}{gray}
+   \binoire{3}{4}{gray}
+   \binoire{3}{5}{gray}   
+\end{tikzpicture}
+\end{minipage}
+
+\vspace{0.25cm}
+Agora que terminamos as 4 unidades do
+multiplicador, podemos eliminá-las e
+começar a trabalhar com a dezena.
+Multiplicamos 2 por
+1 e adicionamos 02 aos milhares e centenas
+do resultado. Em seguida multiplicamos
+as 3 por 1 e adicionamos 03
+às centenas e dezenas do resultado
+final: 322.
+
+\vspace{0.25cm}
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{2}{0}
+   \tige{2}{3}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{1}{1}       %% milhar
+   \tige{8}{0}{0}       %% dezena
+   \tige{9}{2}{1}
+   \tige{10}{9}{0}
+   \tige{11}{2}{0}
+   \cadre{11}
+   \binoire{1}{4}{gray}
+   \binoire{1}{5}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{3}{gray}
+   \binoire{7}{5}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{1}       %% milhar
+   \tige{2}{1}{0}       %% centena
+   \tige{3}{0}{0}       %% dezena
+   \tige{4}{2}{1}
+   \tige{5}{9}{0}
+   \tige{6}{2}{0}
+   \binoire{2}{5}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}       %<- here a dot: units thousands
+   \tige{2}{1}{1}       %% milhar
+   \tige{3}{0}{0}       %% dezena
+   \tige{4}{3}{1}
+   \tige{5}{2}{0}
+   \tige{6}{2}{0}
+   \binoire{2}{5}{gray}
+\end{tikzpicture}
+\end{minipage}
+
+O importante nessa história toda é
+que, quando o produto de dois dígitos
+tem apenas um algarismo, devemos acrescentar
+um zero à esquerda do algarismo.
+
+
+%%% até aqui
+
+
+
+
+
+
+\paragraph{78 $\times$ 86}= $6708$\\
+
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{7}{0}
+   \tige{2}{8}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{8}{0}       %% centena
+   \tige{8}{6}{0}       %% dezena
+   \tige{9}{0}{1}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+   \binoire{1}{10}{gray}
+   \binoire{1}{5}{gray}
+   \binoire{1}{4}{gray}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{3}{gray}
+   \binoire{7}{10}{gray}
+   \binoire{7}{5}{gray}
+   \binoire{7}{4}{gray}
+   \binoire{7}{3}{gray}
+   \binoire{8}{10}{gray}
+   \binoire{8}{5}{gray}   
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{1}       %% milhar
+   \tige{2}{8}{0}       %% centena
+   \tige{3}{6}{0}       %% dezena
+   \tige{4}{4}{1}
+   \tige{5}{2}{0}
+   \tige{6}{0}{0}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{3}{gray}
+   \binoire{3}{10}{gray}
+   \binoire{3}{5}{gray}   
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}       %<- here a dot: units thousands
+   \tige{2}{8}{1}       %% milhar
+   \tige{3}{6}{0}       %% dezena
+   \tige{4}{4}{1}
+   \tige{5}{6}{0}
+   \tige{6}{8}{0}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{3}{gray}
+   \binoire{3}{10}{gray}
+   \binoire{3}{5}{gray}
+\end{tikzpicture}
+\end{minipage}
+
+
+%% 78 * 86
+\vspace{0.2cm}
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{7}{0}
+   \tige{2}{8}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{8}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \tige{9}{4}{1}
+   \tige{10}{6}{0}
+   \tige{11}{8}{0}
+   \cadre{11}
+   \binoire{1}{10}{gray}
+   \binoire{1}{5}{gray}
+   \binoire{1}{4}{gray}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{3}{gray}
+   \binoire{7}{10}{gray}
+   \binoire{7}{5}{gray}
+   \binoire{7}{4}{gray}
+   \binoire{7}{3}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}       %<- here a dot: units thousands
+   \tige{2}{8}{1}       %% milhar
+   \tige{3}{6}{0}       %% dezena
+   \tige{4}{0}{1}
+   \tige{5}{6}{0}
+   \tige{6}{8}{0}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{3}{gray}   
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{1}       %% milhar
+   \tige{2}{8}{0}       %% centena
+   \tige{3}{6}{0}       %% dezena
+   \tige{4}{7}{1}
+   \tige{5}{0}{0}
+   \tige{6}{8}{0}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{3}{gray}
+\end{tikzpicture}
+\end{minipage}
+%% end 78 * 86
+
+\vspace{0.3cm}
+\paragraph{92 $\times$ 67}= $6164$\\
+
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{9}{0}
+   \tige{2}{2}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{6}{0}       %% centena
+   \tige{8}{7}{0}       %% dezena
+   \tige{9}{0}{1}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+   \binoire{1}{10}{gray}
+   \binoire{1}{5}{gray}
+   \binoire{1}{4}{gray}
+   \binoire{1}{3}{gray}
+   \binoire{1}{2}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{7}{10}{gray}
+   \binoire{7}{5}{gray}
+   \binoire{8}{10}{gray}
+   \binoire{8}{5}{gray}
+   \binoire{8}{4}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{1}       %% milhar
+   \tige{2}{6}{0}       %% centena
+   \tige{3}{7}{0}       %% dezena
+   \tige{4}{6}{1}
+   \tige{5}{3}{0}
+   \tige{6}{0}{0}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{3}{10}{gray}
+   \binoire{3}{5}{gray}
+   \binoire{3}{4}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{1}       %% milhar
+   \tige{2}{6}{0}       %% centena
+   \tige{3}{7}{0}       %% dezena
+   \tige{4}{6}{1}
+   \tige{5}{4}{0}
+   \tige{6}{4}{0}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{3}{10}{gray}
+   \binoire{3}{5}{gray}
+   \binoire{3}{4}{gray}
+\end{tikzpicture}
+\end{minipage}
+
+%% 92 * 67
+\vspace{0.2cm}
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{9}{0}
+   \tige{2}{2}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{6}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \tige{9}{6}{1}
+   \tige{10}{4}{0}
+   \tige{11}{4}{0}
+   \cadre{11}
+   \binoire{1}{10}{gray}
+   \binoire{1}{5}{gray}
+   \binoire{1}{4}{gray}
+   \binoire{1}{3}{gray}
+   \binoire{1}{2}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{7}{10}{gray}
+   \binoire{7}{5}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{1}       %% milhar
+   \tige{2}{6}{0}       %% centena
+   \tige{3}{6}{0}       %% dezena
+   \tige{4}{0}{1}
+   \tige{5}{4}{0}
+   \tige{6}{4}{0}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{1}       %% milhar
+   \tige{2}{6}{0}       %% centena
+   \tige{3}{6}{0}       %% dezena
+   \tige{4}{1}{1}
+   \tige{5}{6}{0}
+   \tige{6}{4}{0}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+\end{tikzpicture}
+\end{minipage}
+%% end 92 * 67
+
+
+\vspace{0.5cm}
+\paragraph{42 $\times$ 56}= $2352$\\
+
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{4}{0}
+   \tige{2}{2}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{5}{0}       %% centena
+   \tige{8}{6}{0}       %% dezena
+   \tige{9}{0}{1}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+   \binoire{1}{5}{gray}
+   \binoire{1}{4}{gray}
+   \binoire{1}{3}{gray}
+   \binoire{1}{2}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{7}{10}{gray}
+   \binoire{8}{10}{gray}
+   \binoire{8}{5}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{1}       %% milhar
+   \tige{2}{5}{0}       %% centena
+   \tige{3}{6}{0}       %% dezena
+   \tige{4}{2}{1}
+   \tige{5}{4}{0}
+   \tige{6}{0}{0}
+   \binoire{2}{10}{gray}
+   \binoire{3}{10}{gray}
+   \binoire{3}{5}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}       %<- here a dot: units thousands
+   \tige{2}{5}{1}       %% milhar
+   \tige{3}{6}{0}       %% dezena
+   \tige{4}{2}{1}
+   \tige{5}{5}{0}
+   \tige{6}{2}{0}
+   \binoire{2}{10}{gray}
+   \binoire{3}{10}{gray}
+   \binoire{3}{5}{gray}
+\end{tikzpicture}
+\end{minipage}
+
+%% 42 * 56
+\vspace{0.2cm}
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{4}{0}
+   \tige{2}{2}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{5}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \tige{9}{2}{1}
+   \tige{10}{5}{0}
+   \tige{11}{2}{0}
+   \cadre{11}
+   \binoire{1}{5}{gray}
+   \binoire{1}{4}{gray}
+   \binoire{1}{3}{gray}
+   \binoire{1}{2}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{7}{10}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{1}       %% milhar
+   \tige{2}{5}{0}       %% centena
+   \tige{3}{2}{0}       %% dezena
+   \tige{4}{2}{1}
+   \tige{5}{5}{0}
+   \tige{6}{2}{0}
+   \binoire{2}{10}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}       %<- here a dot: units thousands
+   \tige{2}{5}{1}       %% milhar
+   \tige{3}{2}{0}       %% dezena
+   \tige{4}{3}{1}
+   \tige{5}{5}{0}
+   \tige{6}{2}{0}
+   \binoire{2}{10}{gray}
+\end{tikzpicture}
+\end{minipage}
+%% end 42 * 56
+
+
+\vspace{0.8cm}
+\paragraph{68 $\times$ 85}= $5780$\\
+
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{6}{0}
+   \tige{2}{8}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{8}{0}       %% centena
+   \tige{8}{5}{0}       %% dezena
+   \tige{9}{0}{1}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+   \binoire{1}{10}{gray}
+   \binoire{1}{5}{gray}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{3}{gray}
+   \binoire{7}{10}{gray}
+   \binoire{7}{5}{gray}
+   \binoire{7}{4}{gray}
+   \binoire{7}{3}{gray}
+   \binoire{8}{10}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{1}       %% milhar
+   \tige{2}{8}{0}       %% centena
+   \tige{3}{5}{0}       %% dezena
+   \tige{4}{3}{1}
+   \tige{5}{0}{0}
+   \tige{6}{0}{0}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{3}{gray}
+   \binoire{3}{10}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}       %<- here a dot: units thousands
+   \tige{2}{8}{1}       %% milhar
+   \tige{3}{5}{0}       %% dezena
+   \tige{4}{3}{1}
+   \tige{5}{4}{0}
+   \tige{6}{0}{0}
+      \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{3}{gray}
+   \binoire{3}{10}{gray}
+\end{tikzpicture}
+\end{minipage}
+
+%% 68 * 85
+\vspace{0.2cm}
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{6}{0}
+   \tige{2}{8}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{8}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \tige{9}{3}{1}
+   \tige{10}{4}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+   \binoire{1}{10}{gray}
+   \binoire{1}{5}{gray}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{3}{gray}
+   \binoire{7}{10}{gray}
+   \binoire{7}{5}{gray}
+   \binoire{7}{4}{gray}
+   \binoire{7}{3}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{1}       %% milhar
+   \tige{2}{8}{0}       %% centena
+   \tige{3}{5}{0}       %% dezena
+   \tige{4}{1}{1}
+   \tige{5}{4}{0}
+   \tige{6}{0}{0}
+      \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{3}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}       %<- here a dot: units thousands
+   \tige{2}{8}{1}       %% milhar
+   \tige{3}{5}{0}       %% dezena
+   \tige{4}{7}{1}
+   \tige{5}{8}{0}
+   \tige{6}{0}{0}
+      \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{3}{gray}
+\end{tikzpicture}
+\end{minipage}
+%% end 68 * 85
+
+
+
+
+\paragraph{27 $\times$ 96}= $2592$\\
+
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{2}{0}
+   \tige{2}{7}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{9}{0}       %% centena
+   \tige{8}{6}{0}       %% dezena
+   \tige{9}{0}{1}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+   \binoire{1}{5}{gray}
+   \binoire{1}{4}{gray}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{7}{10}{gray}
+   \binoire{7}{5}{gray}
+   \binoire{7}{4}{gray}
+   \binoire{7}{3}{gray}
+   \binoire{7}{2}{gray}
+   \binoire{8}{10}{gray}
+   \binoire{8}{5}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{1}       %% milhar
+   \tige{2}{9}{0}       %% centena
+   \tige{3}{6}{0}       %% dezena
+   \tige{4}{1}{1}
+   \tige{5}{2}{0}
+   \tige{6}{0}{0}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{3}{gray}
+   \binoire{2}{2}{gray}
+   \binoire{3}{10}{gray}
+   \binoire{3}{5}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}       %<- here a dot: units thousands
+   \tige{2}{9}{1}       %% milhar
+   \tige{3}{6}{0}       %% dezena
+   \tige{4}{1}{1}
+   \tige{5}{6}{0}
+   \tige{6}{2}{0}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{3}{gray}
+   \binoire{2}{2}{gray}
+   \binoire{3}{10}{gray}
+   \binoire{3}{5}{gray}
+\end{tikzpicture}
+\end{minipage}
+
+%% 27 * 96
+\vspace{0.5cm}
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{2}{0}
+   \tige{2}{7}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{9}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \tige{9}{1}{1}
+   \tige{10}{6}{0}
+   \tige{11}{2}{0}
+   \cadre{11}
+   \binoire{1}{5}{gray}
+   \binoire{1}{4}{gray}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{7}{10}{gray}
+   \binoire{7}{5}{gray}
+   \binoire{7}{4}{gray}
+   \binoire{7}{3}{gray}
+   \binoire{7}{2}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{1}       %% milhar
+   \tige{2}{9}{0}       %% centena
+   \tige{3}{1}{0}       %% dezena
+   \tige{4}{9}{1}
+   \tige{5}{6}{0}
+   \tige{6}{2}{0}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{3}{gray}
+   \binoire{2}{2}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}       %<- here a dot: units thousands
+   \tige{2}{9}{1}       %% milhar
+   \tige{3}{2}{0}       %% dezena
+   \tige{4}{5}{1}
+   \tige{5}{9}{0}
+   \tige{6}{2}{0}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{3}{gray}
+   \binoire{2}{2}{gray}
+\end{tikzpicture}
+\end{minipage}
+%%end 27 * 96
+
+\vspace{1cm}
+\paragraph{37 $\times$ 96}= $3552$\\
+
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{3}{0}
+   \tige{2}{7}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{9}{0}       %% centena
+   \tige{8}{6}{0}       %% dezena
+   \tige{9}{0}{1}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+   \binoire{1}{5}{gray}
+   \binoire{1}{4}{gray}
+   \binoire{1}{3}{gray}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{7}{10}{gray}
+   \binoire{7}{5}{gray}
+   \binoire{7}{4}{gray}
+   \binoire{7}{3}{gray}
+   \binoire{7}{2}{gray}
+   \binoire{8}{10}{gray}
+   \binoire{8}{5}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{1}       %% milhar
+   \tige{2}{9}{0}       %% centena
+   \tige{3}{6}{0}       %% dezena
+   \tige{4}{1}{1}
+   \tige{5}{8}{0}
+   \tige{6}{0}{0}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{3}{gray}
+   \binoire{2}{2}{gray}
+   \binoire{3}{10}{gray}
+   \binoire{3}{5}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}       %<- here a dot: units thousands
+   \tige{2}{9}{1}       %% milhar
+   \tige{3}{6}{0}       %% dezena
+   \tige{4}{2}{1}
+   \tige{5}{2}{0}
+   \tige{6}{2}{0}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{3}{gray}
+   \binoire{2}{2}{gray}
+   \binoire{3}{10}{gray}
+   \binoire{3}{5}{gray}
+\end{tikzpicture}
+\end{minipage}
+
+%% 37 * 96
+\vspace{0.5cm}
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{3}{0}
+   \tige{2}{7}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{9}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \tige{9}{2}{1}
+   \tige{10}{2}{0}
+   \tige{11}{2}{0}
+   \cadre{11}
+   \binoire{1}{5}{gray}
+   \binoire{1}{4}{gray}
+   \binoire{1}{3}{gray}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{7}{10}{gray}
+   \binoire{7}{5}{gray}
+   \binoire{7}{4}{gray}
+   \binoire{7}{3}{gray}
+   \binoire{7}{2}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{1}       %% milhar
+   \tige{2}{9}{0}       %% centena
+   \tige{3}{2}{0}       %% dezena
+   \tige{4}{9}{1}
+   \tige{5}{2}{0}
+   \tige{6}{2}{0}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{3}{gray}
+   \binoire{2}{2}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}       %<- here a dot: units thousands
+   \tige{2}{9}{1}       %% milhar
+   \tige{3}{3}{0}       %% dezena
+   \tige{4}{5}{1}
+   \tige{5}{5}{0}
+   \tige{6}{2}{0}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{3}{gray}
+   \binoire{2}{2}{gray}
+\end{tikzpicture}
+\end{minipage}
+%%end 37 * 96
+
+
+\vspace{1cm}
+\paragraph{47 $\times$ 96}= $4512$\\
+
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{4}{0}
+   \tige{2}{7}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{9}{0}       %% centena
+   \tige{8}{6}{0}       %% dezena
+   \tige{9}{0}{1}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+   \binoire{1}{5}{gray}
+   \binoire{1}{4}{gray}
+   \binoire{1}{3}{gray}
+   \binoire{1}{2}{gray}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{7}{10}{gray}
+   \binoire{7}{5}{gray}
+   \binoire{7}{4}{gray}
+   \binoire{7}{3}{gray}
+   \binoire{7}{2}{gray}
+   \binoire{8}{10}{gray}
+   \binoire{8}{5}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{1}       %% milhar
+   \tige{2}{9}{0}       %% centena
+   \tige{3}{6}{0}       %% dezena
+   \tige{4}{2}{1}
+   \tige{5}{4}{0}
+   \tige{6}{0}{0}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{3}{gray}
+   \binoire{2}{2}{gray}
+   \binoire{3}{10}{gray}
+   \binoire{3}{5}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}       %<- here a dot: units thousands
+   \tige{2}{9}{1}       %% milhar
+   \tige{3}{6}{0}       %% dezena
+   \tige{4}{2}{1}
+   \tige{5}{8}{0}
+   \tige{6}{2}{0}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{3}{gray}
+   \binoire{2}{2}{gray}
+   \binoire{3}{10}{gray}
+   \binoire{3}{5}{gray}
+\end{tikzpicture}
+\end{minipage}
+
+%% 47 * 96
+\vspace{0.5cm}
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{4}{0}
+   \tige{2}{7}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{2}{0}       %<- here no dot: tens of thousands
+   \tige{5}{8}{0}       %<- here a dot: units thousands
+   \tige{6}{2}{1}       %% milhar
+   \tige{7}{9}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \tige{9}{2}{1}
+   \tige{10}{8}{0}
+   \tige{11}{2}{0}
+   \cadre{11}
+   \binoire{1}{5}{gray}
+   \binoire{1}{4}{gray}
+   \binoire{1}{3}{gray}
+   \binoire{1}{2}{gray}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{7}{10}{gray}
+   \binoire{7}{5}{gray}
+   \binoire{7}{4}{gray}
+   \binoire{7}{3}{gray}
+   \binoire{7}{2}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{1}       %% milhar
+   \tige{2}{9}{0}       %% centena
+   \tige{3}{3}{0}       %% dezena
+   \tige{4}{8}{1}
+   \tige{5}{8}{0}
+   \tige{6}{2}{0}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{3}{gray}
+   \binoire{2}{2}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}       %<- here a dot: units thousands
+   \tige{2}{9}{1}       %% milhar
+   \tige{3}{4}{0}       %% dezena
+   \tige{4}{5}{1}
+   \tige{5}{1}{0}
+   \tige{6}{2}{0}
+   \binoire{2}{10}{gray}
+   \binoire{2}{5}{gray}
+   \binoire{2}{4}{gray}
+   \binoire{2}{3}{gray}
+   \binoire{2}{2}{gray}
+\end{tikzpicture}
+\end{minipage}
+%%end 47 * 96
+
+
+\vspace{1cm}
+\paragraph{8 $\times$ 96}= $768$\\
+
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{8}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{9}{0}       %% dezena
+   \tige{9}{6}{1}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+   \binoire{1}{10}{gray}
+   \binoire{1}{5}{gray}
+   \binoire{1}{4}{gray}
+   \binoire{1}{3}{gray}
+   \binoire{8}{10}{gray}
+   \binoire{8}{5}{gray}
+   \binoire{8}{4}{gray}
+   \binoire{8}{3}{gray}
+   \binoire{8}{2}{gray}
+   \binoire{9}{10}{gray}
+   \binoire{9}{5}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{1}       %% milhar
+   \tige{2}{0}{0}       %% centena
+   \tige{3}{9}{0}       %% dezena
+   \tige{4}{6}{1}
+   \tige{5}{4}{0}
+   \tige{6}{8}{0}
+   \binoire{3}{10}{gray}
+   \binoire{3}{5}{gray}
+   \binoire{3}{4}{gray}
+   \binoire{3}{3}{gray}
+   \binoire{3}{2}{gray}
+   \binoire{4}{10}{gray}
+   \binoire{4}{5}{gray}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.3\textwidth}
+\begin{tikzpicture}
+   \tige{1}{0}{0}       %<- here a dot: units thousands
+   \tige{2}{0}{1}       %% milhar
+   \tige{3}{9}{0}       %% dezena
+   \tige{4}{7}{1}
+   \tige{5}{6}{0}
+   \tige{6}{8}{0}
+   \binoire{3}{10}{gray}
+   \binoire{3}{5}{gray}
+   \binoire{3}{4}{gray}
+   \binoire{3}{3}{gray}
+   \binoire{3}{2}{gray}
+\end{tikzpicture}
+\end{minipage}
+
+
+
+\section{Taboada}
+A primeira coisa que precisamos fazer antes de
+mergulhar na matemática é estabelecer um plano
+de treinamento para nossa memória. Um bom
+exercício para a memória é aprender a toboada
+de multiplicação, que daqui para diante chamaremos
+apenas de {\em taboada}. 
+
+Sabemos que o conjunto dos seres humanos
+é dividida em dois grandes subconjuntos, a saber:
+\begin{enumerate}
+\item Aqueles que sabem a taboada. Se você é um
+dos que sabem a taboada, então aproveite esse
+capítulo para firmar ainda mais esse conhecimento.
+\item Pessoas que não sabem a taboada. Essas
+pessoas não conseguem fazer multiplicação ou divisão
+sem calculadora. Se você se encontra
+nessa difícil situação, ainda está em tempo de
+aprender a taboada. Poékhali! Então vamos lá!
+\end{enumerate}
+
+\section{Truques para aprender a taboada}
+Evidentemente, você deve reagir quase instantaneamente
+quando precisar, por exemplo, do valor de $9\times 6$.
+Qualquer hesitação ou utilização de truques pode ter
+uma das seguintes consequências em um {\em high stakes test}:
+\begin{enumerate}
+\item Erros. Hesitação significa que a taboada não está
+bem firme no seu cérebro. Nesse caso, você pode utilizar
+um valor errado.
+\item Demora. Enquanto você está tentando descobrir quanto
+vale $9\times 6$, seu concorrente já estará terminando
+a próxima pergunta.
+\item Cansaço mental. Essa é a pior consequência de não
+decorar bem a tabela de multiplicação. Fazer contas sem
+domínio total da taboada é muito cansativo.
+\end{enumerate}
+
+\begin{tabular}{p{1cm}p{1cm}p{1cm}p{1cm}p{1cm}p{1cm}p{1cm}p{1cm}p{1cm}}
+\hline
+x & 2  & 3  & 4  & 5  & 6  & 7  & 8  & 9  \\
+\hline
+2 & 4  & 6  & 8  & 10 & 12   & 14    & 16 & 18 \\
+\hline
+3 & 6   & 9   & 12   & 15   & 18   & 21   & 24   & 27   \\
+\hline
+4 & 8   & 12   & 16   & 20   & 24   & 28   & 32   & 36   \\
+\hline
+5 & 10   & 15   & 20   & 25   & 30   & 35   & 40   & 45   \\
+\hline
+6 & 12   & 18   & 24   & 30   & 36   & 42   & 48   & 54   \\
+\hline
+7 & 14   & 21   & 28   & 35   & 42   & 49   & 56   & 63   \\
+\hline
+8 & 16   & 24   & 32   & 40   & 48   & 56   & 64   & 72   \\
+\hline
+9 & 18   & 27   & 36   & 45   & 54   & 63   & 72   & 81   \\
+\hline
+\end{tabular}
+
+
+\paragraph{Taboada do 9.} Para multiplicar um número $n$ por
+nove, basta multiplicar por 10 e subtrair $n$. Seja o exemplo
+de $6\times 9$, com o qual começamos essa discussão. Temos
+que $6\times 10= 60$. Subtraindo $6$ de $60$,
+temos $60-6= 54= 6\times 9$. Você pode utilizar esse
+truque no começo, mas não deixe de fazer muitos exercícios,
+até conseguir multiplicar qualquer número de 2 a 9 por
+9 sem nenhum cansaço mental. Cansaço mental acaba com
+o candidato em um {\em high stakes test}.
+
+\paragraph{Taboada do 8.} A taboada do oito é dividida
+em duas partes: números de 2 a 5 e números de 6 a 9.
+
+Para um número $n$ de 2 a 5, a dezena de $8\times n$
+é dado por $n-1$ e a unidade é dada por $2\times (5-n)$.
+Vejamos alguns exemplos:\\
+
+\begin{tabular}{p{2cm}p{2cm}p{4cm}p{4cm}}
+   &  & Dezena & Unidade\\
+$8\times 2$ &16 & $2-1= 1$ & $2\times(5-2)=6$\\
+$8\times 3$ &24 & $3-1= 2$ & $2\times(5-3)=4$\\
+$8\times 4$ &32 & $4-1= 3$ & $2\times(5-4)=2$\\
+$8\times 5$ &40 & $5-1= 4$ & $2\times(5-5)=0$\\
+\end{tabular}
+
+\verb||\\
+Quando $n$ vai de 6 a 9, a dezena de $8\times n$ é
+dado por $n-2$, e a unidade vale $2\times (10-n)$.\\
+
+\begin{tabular}{p{2cm}p{2cm}p{4cm}p{4cm}}
+   &  & Dezena & Unidade\\
+$8\times 6$ & 48 & $6-2= 4$ & $2\times(10-6)=8$\\
+$8\times 7$ &56 & $7-2= 5$ & $2\times(10-7)=6$\\
+$8\times 8$ &64 & $8-2= 6$ & $2\times(10-8)=4$\\
+$8\times 9$ &72 & $9-2= 7$ & $2\times(10-9)=2$\\
+\end{tabular}
+
+
+\paragraph{Taboada de 6.} Há três casos a considerar para
+encontrar as unidades da taboada de seis
+de um número $n$ que vai de 2 a 9.
+\begin{enumerate}
+\item $n$ é par. Nesse caso, a unidade do produto por 6 é igual a $n$.
+\item $n$ é ímpar menor que 5. Nesse caso, a unidade é $n+5$.
+\item $n$ é ímpar maior ou igual a 5. Aqui, a unidade é $n-5$.
+\end{enumerate}
+
+As dezenas são mais difíceis de se obter. As regras são:
+\begin{enumerate}
+\item Se o número $n$ é par, a dezena é a metade de $n$.
+Consideremos os casos de 2, 4, 6 e 8. 
+\begin{itemize}
+\item$6\times 2$. Dezena= 2/1= 1, unidade= 2. Resultado: 12.
+\item$6\times 4$. Dezena= 4/2= 2, unidade= 4. Resultado: 24.
+\item$6\times 6$. Dezena= 6/3= 3, unidade= 6. Resultado: 36.
+\item$6\times 8$. Dezena= 8/4= 4, unidade= 8. Resultado: 48.
+\end{itemize}
+\item No caso de números menores que 5, a dezena é o quociente
+da divisão por 2. Apenas o número 3 satisfaz essa condição.
+Então, o quociente da divisão de 3 por 2 é 1. Isso significa
+que $6\times 3$ é 18.
+\item No caso de números ímpares maiores que 5, a dezena é
+o quociente da divisão por 2 mais 1. Nesse caso, temos 5,
+7 e 9. No caso de 5, a dezena é 3 e $6\times 5= 30$. 
+No caso de 7, a dezena é 4, e $6\times 7= 42$.
+No caso de 9, a dezena é 5, e $6\times 9= 54$. 
+\end{enumerate}
+
+\paragraph{Taboada de 5.} Nesse caso, as unidades são
+muito fáceis de encontrar: elas são 5 para $n$ ímpar
+e 0 para $n$ par. As dezenas, para $n$ entre 2 e 9,
+são obtidas pelo quociente da divisão de $n$ por 2.
+Seja o caso de $n=6$. Como 6 é par, a unidade é 0.
+A dezena é 6/2= 3. Então $5\times 6= 30$. 
+Vejamos outro exemplo de multiplicação de $n$ entre
+2 e 9 por 5. No caso do número 7, que é ímpar, a
+unidade é 5. A dezena é o quocienet de 7 por 2,
+ou seja, 3. Então, o resultado é 35.
+
+Como a taboada de 5 é tão fácil, talvez uma boa regra
+para encontrar $6\times n$, com $n$ entre 2 e 9, seja
+fazer a conta $5\times n + n$. Por exemplo, seja
+encontrar $6\times 7$. Basta encontrar $5\times 7 + 7$,
+que dá 42, é claro.
+
+\paragraph{Taboada de 2.} A maneira mais fácil de 
+obter a taboada de dois para $n$ entre 2 e 9 é somar
+$n$ com ele mesmo. Por exemplo, $2\times 8= 8+8= 16$.
+
+\paragraph{Taboada de 7.}
+Sabendo a taboada de 2 e de 5, podemos obter facilmente
+a taboada de 7 para $n$ entre 2 e 9. Para isso, 
+basta somar $5\times n + 2\times n$. Por exemplo,
+para encontrar $7\times 8$,
+fazemos $5\times 8 + 2\times 8= 40+16= 56$.
+\begin{itemize}
+\item $2\times 7= 2\times 5 + 2\times 2= 14$
+\item $3\times 7= 3\times 5 + 2\times 3= 21$
+\item $4\times 7= 4\times 5 + 2\times 4= 28$
+\item $5\times 7= 5\times 5 + 2\times 5= 35$
+\item $6\times 7= 6\times 5 + 2\times 6= 42$
+\item $7\times 7= 7\times 5 + 2\times 7= 49$
+\item $8\times 7= 8\times 5 + 2\times 8= 56$
+\item $9\times 7= 9\times 5 + 2\times 9= 63$
+\end{itemize}
+
+
+\paragraph{Taboada de 3.} Para achar $3\times n$,
+use $3\times n= 2\times n + n$.
+E.g. $3\times 8= 16+8= 24$.
+
+\paragraph{Taboada de 4.}
+Para calcular $4\times n$,  basta fazer
+$4\times n= 2\times n + 2\times n$.
+
+\chapter{Mais multiplicações}
+
+Considerando que as pedras do ábaco não
+podem mudar de cor, não vamos mais marcar
+com pedras cinzas o multiplicando e o
+multiplicador.\\ 
+
+\vspace{0.3cm}
+\paragraph{256 $\times$ 304}= 77824\\
+\ladj{0.35}
+
+\vspace{0.2cm}
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+   \tige{1}{2}{0}
+   \tige{2}{5}{0}       %<- here a dot: unit million
+   \tige{3}{6}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{3}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{4}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \tige{9}{8}{1}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{2}{0}
+   \tige{2}{5}{0}       %<- here a dot: unit million
+   \tige{3}{6}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{3}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{4}{0}       %% centena
+   \tige{8}{1}{0}       %% dezena
+   \tige{9}{0}{1}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+\vspace{0.3cm}
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+   \tige{1}{2}{0}
+   \tige{2}{5}{0}       %<- here a dot: unit million
+   \tige{3}{6}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{3}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{4}{0}       %% centena
+   \tige{8}{1}{0}       %% dezena
+   \tige{9}{0}{1}
+   \tige{10}{2}{0}
+   \tige{11}{4}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{2}{0}
+   \tige{2}{5}{0}       %<- here a dot: unit million
+   \tige{3}{6}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{3}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{6}{0}       %% centena
+   \tige{8}{1}{0}       %% dezena
+   \tige{9}{0}{1}
+   \tige{10}{2}{0}
+   \tige{11}{4}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+
+\vspace{0.3cm}
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+   \tige{1}{2}{0}
+   \tige{2}{5}{0}       %<- here a dot: unit million
+   \tige{3}{6}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{3}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{7}{0}       %% centena
+   \tige{8}{6}{0}       %% dezena
+   \tige{9}{0}{1}
+   \tige{10}{2}{0}
+   \tige{11}{4}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{2}{0}
+   \tige{2}{5}{0}       %<- here a dot: unit million
+   \tige{3}{6}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{3}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{7}{0}       %% centena
+   \tige{8}{7}{0}       %% dezena
+   \tige{9}{8}{1}
+   \tige{10}{2}{0}
+   \tige{11}{4}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+
+\vspace{0.35cm}
+\paragraph{356 $\times$ 28}= 9968\\
+\ladj{0.28}
+
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+   \tige{1}{3}{0}
+   \tige{2}{5}{0}       %<- here a dot: unit million
+   \tige{3}{6}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{2}{1}       %% milhar
+   \tige{7}{8}{0}       %% centena
+   \tige{8}{2}{0}       %% dezena
+   \tige{9}{4}{1}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{3}{0}
+   \tige{2}{5}{0}       %<- here a dot: unit million
+   \tige{3}{6}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{2}{1}       %% milhar
+   \tige{7}{8}{0}       %% centena
+   \tige{8}{2}{0}       %% dezena
+   \tige{9}{8}{1}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+\vspace{0.2cm}
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+   \tige{1}{3}{0}
+   \tige{2}{5}{0}       %<- here a dot: unit million
+   \tige{3}{6}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{2}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{2}{0}       %% dezena
+   \tige{9}{8}{1}
+   \tige{10}{4}{0}
+   \tige{11}{8}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{3}{0}
+   \tige{2}{5}{0}       %<- here a dot: unit million
+   \tige{3}{6}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{2}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{8}{0}       %% dezena
+   \tige{9}{8}{1}
+   \tige{10}{4}{0}
+   \tige{11}{8}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+
+\vspace{0.2cm}
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+   \tige{1}{3}{0}
+   \tige{2}{5}{0}       %<- here a dot: unit million
+   \tige{3}{6}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{2}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{9}{0}       %% dezena
+   \tige{9}{8}{1}
+   \tige{10}{4}{0}
+   \tige{11}{8}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{3}{0}
+   \tige{2}{5}{0}       %<- here a dot: unit million
+   \tige{3}{6}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{2}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{9}{0}       %% dezena
+   \tige{9}{9}{1}
+   \tige{10}{6}{0}
+   \tige{11}{8}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+
+
+
+\vspace{0.35cm}
+\paragraph{256 $\times$ 28}= 7168\\
+\ladj{0.28}
+
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+   \tige{1}{2}{0}
+   \tige{2}{5}{0}       %<- here a dot: unit million
+   \tige{3}{6}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{2}{1}       %% milhar
+   \tige{7}{8}{0}       %% centena
+   \tige{8}{1}{0}       %% dezena
+   \tige{9}{6}{1}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{2}{0}
+   \tige{2}{5}{0}       %<- here a dot: unit million
+   \tige{3}{6}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{2}{1}       %% milhar
+   \tige{7}{8}{0}       %% centena
+   \tige{8}{2}{0}       %% dezena
+   \tige{9}{0}{1}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+\vspace{0.2cm}
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+   \tige{1}{3}{0}
+   \tige{2}{5}{0}       %<- here a dot: unit million
+   \tige{3}{6}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{2}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{2}{0}       %% dezena
+   \tige{9}{0}{1}
+   \tige{10}{4}{0}
+   \tige{11}{8}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{3}{0}
+   \tige{2}{5}{0}       %<- here a dot: unit million
+   \tige{3}{6}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{2}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{6}{0}       %% dezena
+   \tige{9}{0}{1}
+   \tige{10}{4}{0}
+   \tige{11}{8}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+
+\vspace{0.2cm}
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+   \tige{1}{3}{0}
+   \tige{2}{5}{0}       %<- here a dot: unit million
+   \tige{3}{6}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{2}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{7}{0}       %% dezena
+   \tige{9}{0}{1}
+   \tige{10}{4}{0}
+   \tige{11}{8}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{3}{0}
+   \tige{2}{5}{0}       %<- here a dot: unit million
+   \tige{3}{6}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{2}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{7}{0}       %% dezena
+   \tige{9}{1}{1}
+   \tige{10}{6}{0}
+   \tige{11}{8}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+
+
+
+\vspace{0.35cm}
+\paragraph{256 $\times$ 47}= 12032\\
+\ladj{0.28}
+
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+   \tige{1}{2}{0}
+   \tige{2}{5}{0}       %<- here a dot: unit million
+   \tige{3}{6}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{4}{1}       %% milhar
+   \tige{7}{7}{0}       %% centena
+   \tige{8}{1}{0}       %% dezena
+   \tige{9}{4}{1}
+   \tige{10}{0}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{2}{0}
+   \tige{2}{5}{0}       %<- here a dot: unit million
+   \tige{3}{6}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{4}{1}       %% milhar
+   \tige{7}{7}{0}       %% centena
+   \tige{8}{1}{0}       %% dezena
+   \tige{9}{7}{1}
+   \tige{10}{5}{0}
+   \tige{11}{0}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+\vspace{0.2cm}
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+   \tige{1}{2}{0}
+   \tige{2}{5}{0}       %<- here a dot: unit million
+   \tige{3}{6}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{4}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{1}{0}       %% dezena
+   \tige{9}{7}{1}
+   \tige{10}{9}{0}
+   \tige{11}{2}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{2}{0}
+   \tige{2}{5}{0}       %<- here a dot: unit million
+   \tige{3}{6}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{4}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{9}{0}       %% dezena
+   \tige{9}{7}{1}
+   \tige{10}{9}{0}
+   \tige{11}{2}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+
+\vspace{0.2cm}
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+   \tige{1}{2}{0}
+   \tige{2}{5}{0}       %<- here a dot: unit million
+   \tige{3}{6}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{4}{1}       %% milhar
+   \tige{7}{1}{0}       %% centena
+   \tige{8}{1}{0}       %% dezena
+   \tige{9}{7}{1}
+   \tige{10}{9}{0}
+   \tige{11}{2}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{3}{0}
+   \tige{2}{5}{0}       %<- here a dot: unit million
+   \tige{3}{6}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{4}{1}       %% milhar
+   \tige{7}{1}{0}       %% centena
+   \tige{8}{2}{0}       %% dezena
+   \tige{9}{0}{1}
+   \tige{10}{3}{0}
+   \tige{11}{2}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+\chapter{Multiplicação fatorada}
+Neste capítulo, vamos aprender uma nova
+forma de fazer multiplicações. Suponhamos
+que você queira multiplicar 38 por 46.
+Coloque o multiplicador 37 (38-1) na
+extremidade esquerda
+do ábaco e o multiplicando 46 na direita. 
+Como já registramos uma ocorrência do
+multiplicando, subtraímos 1 do multiplicador.
+Lembre-se, nesse método, sempre subtraímos
+1 do multiplicador para compensar o registro
+do multiplicando no início do processo.
+
+\vspace{0.2cm}
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+   \tige{1}{3}{0}
+   \tige{2}{7}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{0}{0}       %% dezena
+   \tige{9}{0}{1}
+   \tige{10}{4}{0}
+   \tige{11}{6}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{3}{0}
+   \tige{2}{7}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{1}{0}       %% dezena
+   \tige{9}{2}{1}
+   \tige{10}{4}{0}
+   \tige{11}{6}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+\vspace{0.2cm}
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+   \tige{1}{3}{0}
+   \tige{2}{7}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{1}{0}       %% dezena
+   \tige{9}{5}{1}
+   \tige{10}{2}{0}
+   \tige{11}{6}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+   \tige{1}{3}{0}
+   \tige{2}{7}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{1}{0}       %% dezena
+   \tige{9}{7}{1}
+   \tige{10}{0}{0}
+   \tige{11}{6}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+\verb||\\
+Os passos são:
+\begin{enumerate}
+\item Registramos $3\times 4= 12$ nas colunas 4 e 3
+  a partir da direita. Raciocínio: 3 dezenas (2 dígitos)
+  vezes 4 dezenas (mais 2 dígitos) ocupam as
+  colunas 4 e 3.
+\item Adicionamos $7\times 4= 28$ às colunas 3 e 2.
+  Raciocínio: 7 unidades (1 dígito) vezes
+  4 dezenas (2 dígitos) vai para a coluna 3 (1+2).
+\item Adicionamos $3\times 6= 18$ às colunas 3 e 2.
+  Raciocine assim: $3\times 6$ são dezenas (2 dígitos)
+  vezes unidades (1 dígito). Um total de três dígitos
+  começa na coluna 3.
+\end{enumerate}
+
+\vspace{0.2cm}
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}
+   \tige{1}{3}{0}
+   \tige{2}{7}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{1}{0}       %% dezena
+   \tige{9}{7}{1}
+   \tige{10}{4}{0}
+   \tige{11}{8}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.4\textwidth}
+  Finalmente, adicionamos $7\times 6$
+  nas colunas 2 e 1. O resultado final,
+  1748 é registrado no lado direito
+  do ábaco.
+\end{minipage}
+
+\vspace{0.5cm}
+\section{Multiplicações continuadas}
+A principal desvantagem desse método é
+que fica difícil colocar cada par de dígito
+da resposta nas colunas corretas.
+A grande vantagem desse método é permitir que
+se continue com as multiplicações. Por exemplo,
+se você quiser multiplicar 1748 por 7, basta
+colocar 6 na extremidade esquerda do ábaco
+e repetir o processo. O multiplicando 1748
+já se encontra na extremidade direita do
+ábaco como resultado do produto de 38 por 46.
+
+Vamos recordar novamente
+que é preciso subtrair 1 do multiplicador
+para levar em conta que o multiplicando
+já se encontra posicionado na parte
+direita do ábaco. No exemplo, como
+queremos multiplicar $7\times 1748$, o multiplicador
+é 6, e não 7 como seria de esperar-se.
+
+Lembre-se
+de que multiplicação de dígito
+por dígito ocupa sempre duas casas.
+Assim, $6\times 1$ é 06 e ocupa as
+casas 5 e 4 do ábaco, contando da direita
+para a esquerda. As etapas do cálculo podem
+ser descritas pelos seguintes passos:
+
+\begin{enumerate}
+\item Casa 5:  $6\times 1= 06$ --- somar 0
+\item Casa 4: $6\times 1= 06$ --- somar 6
+\item Casa 4: $6\times 7= 42$ --- somar 40
+\item Casa 3: $6\times 7= 42$ --- somar 2
+\item Casa 3: $6\times 4= 24$ --- somar 20
+\item Casa 2: $6\times 4= 24$ --- somar 4
+\item Casa 2: $6\times 8= 48$ --- somar 40
+\item Casa 1: $6\times 8= 48$ --- somar 8
+\end{enumerate}
+
+Na multiplicação de 6 por 1748,
+cada uma dos sucessivos
+estados pelos quais o ábaco passa
+é indicado na figura abaixo.
+
+\vspace{0.2cm}
+\begin{minipage}{0.5\textwidth}
+1 --
+\begin{tikzpicture}
+   \tige{1}{6}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{1}{0}       %% dezena
+   \tige{9}{7}{1}
+   \tige{10}{4}{0}
+   \tige{11}{8}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.4\textwidth}
+2 -- \begin{tikzpicture}
+   \tige{1}{6}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{0}{0}       %% centena
+   \tige{8}{7}{0}       %% dezena
+   \tige{9}{7}{1}
+   \tige{10}{4}{0}
+   \tige{11}{8}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+
+\vspace{0.2cm}
+\begin{minipage}{0.5\textwidth}
+3 -- \begin{tikzpicture}
+   \tige{1}{6}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{1}{0}       %% centena
+   \tige{8}{1}{0}       %% dezena
+   \tige{9}{7}{1}
+   \tige{10}{4}{0}
+   \tige{11}{8}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.4\textwidth}
+4 -- \begin{tikzpicture}
+   \tige{1}{6}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{1}{0}       %% centena
+   \tige{8}{1}{0}       %% dezena
+   \tige{9}{9}{1}
+   \tige{10}{4}{0}
+   \tige{11}{8}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+
+
+\vspace{0.2cm}
+\begin{minipage}{0.5\textwidth}
+5 -- \begin{tikzpicture}
+   \tige{1}{6}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{1}{0}       %% centena
+   \tige{8}{2}{0}       %% dezena
+   \tige{9}{1}{1}
+   \tige{10}{4}{0}
+   \tige{11}{8}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.4\textwidth}
+6 -- \begin{tikzpicture}
+   \tige{1}{6}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{1}{0}       %% centena
+   \tige{8}{2}{0}       %% dezena
+   \tige{9}{1}{1}
+   \tige{10}{8}{0}
+   \tige{11}{8}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+
+\vspace{0.2cm}
+\begin{minipage}{0.5\textwidth}
+7 -- \begin{tikzpicture}
+   \tige{1}{6}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{1}{0}       %% centena
+   \tige{8}{2}{0}       %% dezena
+   \tige{9}{2}{1}
+   \tige{10}{2}{0}
+   \tige{11}{8}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}%
+%
+\begin{minipage}{0.4\textwidth}
+8 -- \begin{tikzpicture}
+   \tige{1}{6}{0}
+   \tige{2}{0}{0}       %<- here a dot: unit million
+   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+   \tige{5}{0}{0}       %<- here a dot: units thousands
+   \tige{6}{0}{1}       %% milhar
+   \tige{7}{1}{0}       %% centena
+   \tige{8}{2}{0}       %% dezena
+   \tige{9}{2}{1}
+   \tige{10}{3}{0}
+   \tige{11}{6}{0}
+   \cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+
+\end{document}
+
+

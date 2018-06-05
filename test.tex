@@ -1,0 +1,197 @@
+\documentclass[12pt]{book}
+
+\usepackage{pgf-soroban}
+\usepackage{tikz}
+\usepackage{circuitikz}
+\usepackage{pdfpages}
+
+\begin{document}
+%\begin{minipage}{0.4\textwidth}
+%\begin{tikzpicture}
+%   \tige{1}{0}{0}
+%   \tige{2}{0}{0}       %<- here a dot: unit million
+%   \tige{3}{0}{1}       %<- here no dot: hundreds of thousands
+%   \tige{4}{0}{0}       %<- here no dot: tens of thousands
+%   \tige{5}{0}{0}       %<- here a dot: units thousands
+%   \tige{6}{0}{1}
+%   \tige{7}{1}{0}
+%   \binoire{7}{5}{gray}
+%   \tige{8}{5}{0}       %<- here a dot: units
+%   \binoire{8}{10}{gray}
+%   \barbil{8}{10}{0}
+%   \barbil{8}{4}{0}
+%   \barbil{8}{3}{0}
+%   \barbil{8}{2}{0}
+%   \barbil{8}{1}{0}
+%   \tige{9}{2}{1}
+%   \binoire{9}{4}{gray}
+%   \barbil{9}{4}{0}
+%   \binoire{9}{5}{gray}
+%   \barbil{9}{9}{1}
+%   \tige{10}{0}{0}
+%   \tige{11}{0}{0}
+%   \cadre{11}
+%\end{tikzpicture}
+%\end{minipage}%
+
+\ladj{0.5}
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+ \tige{1}{3}{0}
+ \binoire{1}{3}{gray}
+ \binoire{1}{4}{gray}
+ \binoire{1}{5}{gray}
+ \tige{2}{2}{0}
+ \binoire{2}{4}{gray}
+ \binoire{2}{5}{gray}
+ \tige{3}{0}{1}
+ \tige{4}{0}{0}
+ \tige{5}{0}{0}
+ \tige{6}{0}{1}
+ \tige{7}{2}{0}
+ \binoire{7}{4}{gray}
+ \binoire{7}{5}{gray}
+ \tige{8}{1}{0}
+ \binoire{8}{5}{gray}
+ \tige{9}{0}{1}
+ \tige{10}{3}{0}
+ \binoire{10}{3}{gray}
+ \binoire{10}{4}{gray}
+ \binoire{10}{5}{gray}
+ \barbil{10}{3}{0}
+ \barbil{10}{4}{0}
+ \barbil{10}{5}{0}
+ \tige{11}{0}{0}
+\cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+ \tige{1}{3}{0}
+ \binoire{1}{3}{gray}
+ \binoire{1}{4}{gray}
+ \binoire{1}{5}{gray}
+ \tige{2}{2}{0}
+ \binoire{2}{4}{gray}
+ \binoire{2}{5}{gray}
+ \tige{3}{0}{1}
+ \tige{4}{0}{0}
+ \tige{5}{0}{0}
+ \tige{6}{0}{1}
+ \tige{7}{2}{0}
+ \binoire{7}{4}{gray}
+ \binoire{7}{5}{gray}
+ \tige{8}{1}{0}
+ \binoire{8}{5}{gray}
+ \tige{9}{0}{1}
+ \tige{10}{3}{0}
+ \binoire{10}{3}{gray}
+ \binoire{10}{4}{gray}
+ \binoire{10}{5}{gray}
+ \tige{11}{2}{0}
+ \binoire{11}{4}{gray}
+ \binoire{11}{5}{gray}
+ \barbil{11}{4}{0}
+ \barbil{11}{5}{0}
+\cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+ \tige{1}{3}{0}
+ \binoire{1}{3}{gray}
+ \binoire{1}{4}{gray}
+ \binoire{1}{5}{gray}
+ \tige{2}{2}{0}
+ \binoire{2}{4}{gray}
+ \binoire{2}{5}{gray}
+ \tige{3}{0}{1}
+ \tige{4}{0}{0}
+ \tige{5}{0}{0}
+ \tige{6}{0}{1}
+ \tige{7}{2}{0}
+ \binoire{7}{4}{gray}
+ \binoire{7}{5}{gray}
+ \tige{8}{0}{0}
+ \tige{9}{6}{1}
+ \binoire{9}{10}{gray}
+ \binoire{9}{5}{gray}
+ \barbil{9}{10}{1}
+ \barbil{9}{5}{1}
+ \tige{10}{3}{0}
+ \binoire{10}{3}{gray}
+ \binoire{10}{4}{gray}
+ \binoire{10}{5}{gray}
+ \tige{11}{2}{0}
+ \binoire{11}{4}{gray}
+ \binoire{11}{5}{gray}
+\cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+ \tige{1}{3}{0}
+ \binoire{1}{3}{gray}
+ \binoire{1}{4}{gray}
+ \binoire{1}{5}{gray}
+ \tige{2}{2}{0}
+ \binoire{2}{4}{gray}
+ \binoire{2}{5}{gray}
+ \tige{3}{0}{1}
+ \tige{4}{0}{0}
+ \tige{5}{0}{0}
+ \tige{6}{0}{1}
+ \tige{7}{2}{0}
+ \binoire{7}{4}{gray}
+ \binoire{7}{5}{gray}
+ \tige{8}{0}{0}
+ \tige{9}{6}{1}
+ \binoire{9}{10}{gray}
+ \binoire{9}{5}{gray}
+ \tige{10}{7}{0}
+ \binoire{10}{10}{gray}
+ \binoire{10}{4}{gray}
+ \binoire{10}{5}{gray}
+ \barbil{10}{10}{0}
+ \barbil{10}{4}{0}
+ \barbil{10}{5}{0}
+ \tige{11}{2}{0}
+ \binoire{11}{4}{gray}
+ \binoire{11}{5}{gray}
+\cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}
+ \tige{1}{3}{0}
+ \binoire{1}{3}{gray}
+ \binoire{1}{4}{gray}
+ \binoire{1}{5}{gray}
+ \tige{2}{2}{0}
+ \binoire{2}{4}{gray}
+ \binoire{2}{5}{gray}
+ \tige{3}{0}{1}
+ \tige{4}{0}{0}
+ \tige{5}{0}{0}
+ \tige{6}{0}{1}
+ \tige{7}{0}{0}
+ \tige{8}{0}{0}
+ \tige{9}{6}{1}
+ \binoire{9}{10}{gray}
+ \binoire{9}{5}{gray}
+ \tige{10}{7}{0}
+ \binoire{10}{10}{gray}
+ \binoire{10}{4}{gray}
+ \binoire{10}{5}{gray}
+ \tige{11}{2}{0}
+ \binoire{11}{4}{gray}
+ \binoire{11}{5}{gray}
+\cadre{11}
+\end{tikzpicture}
+\end{minipage}
+
+\end{document}
